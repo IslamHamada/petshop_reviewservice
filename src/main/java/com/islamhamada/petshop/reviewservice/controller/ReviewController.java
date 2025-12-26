@@ -17,13 +17,13 @@ public class ReviewController {
 
     @GetMapping
     @RequestMapping("/{id}")
-    public ResponseEntity<Review> getReviewById(@PathVariable long id){
+    public ResponseEntity<Review> getReviewById(@PositiveOrZero @PathVariable long id){
         Review review = reviewService.getReviewById(id);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Review> postProductReview(@RequestBody PostReviewRequest request){
+    public ResponseEntity<Review> postProductReview(@Valid @RequestBody PostReviewRequest request){
         Review review = reviewService.postProductReview(request);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
