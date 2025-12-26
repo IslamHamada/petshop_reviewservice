@@ -21,4 +21,10 @@ public class ReviewController {
         Review review = reviewService.getReviewById(id);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<Review> postProductReview(@RequestBody PostReviewRequest request){
+        Review review = reviewService.postProductReview(request);
+        return new ResponseEntity<>(review, HttpStatus.OK);
+    }
 }
