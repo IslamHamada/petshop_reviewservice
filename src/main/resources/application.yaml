@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ReviewService
+
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL:localhost:8082}
+
+server:
+  port: 8087
