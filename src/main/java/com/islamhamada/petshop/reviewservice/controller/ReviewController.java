@@ -8,6 +8,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
+    @PreAuthorize("hasAnyRole('Customer')")
     @GetMapping
     @RequestMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PositiveOrZero @PathVariable long id){
@@ -25,6 +27,7 @@ public class ReviewController {
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('Customer')")
     @PostMapping
     public ResponseEntity<Review> postProductReview(@Valid @RequestBody PostReviewRequest request){
         Review review = reviewService.postProductReview(request);
