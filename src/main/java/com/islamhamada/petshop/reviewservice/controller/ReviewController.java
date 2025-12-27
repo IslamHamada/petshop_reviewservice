@@ -1,7 +1,10 @@
 package com.islamhamada.petshop.reviewservice.controller;
 
 import com.islamhamada.petshop.reviewservice.entity.Review;
+import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
 import com.islamhamada.petshop.reviewservice.service.ReviewService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
