@@ -12,4 +12,6 @@ public class PostReviewRequest {
     private int rating;
     @PositiveOrZero
     private long product_id;
+    @PositiveOrZero
+    private long user_id;
 }
