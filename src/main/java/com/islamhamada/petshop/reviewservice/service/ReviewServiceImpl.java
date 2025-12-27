@@ -1,6 +1,7 @@
 package com.islamhamada.petshop.reviewservice.service;
 
 import com.islamhamada.petshop.reviewservice.entity.Review;
+import com.islamhamada.petshop.reviewservice.exception.ReviewException;
 import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
 import com.islamhamada.petshop.reviewservice.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
