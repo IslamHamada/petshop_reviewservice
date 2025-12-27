@@ -4,9 +4,13 @@ import com.islamhamada.petshop.reviewservice.entity.Review;
 import com.islamhamada.petshop.reviewservice.exception.ReviewException;
 import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
 import com.islamhamada.petshop.reviewservice.repository.ReviewRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Log4j2
 @Service
 public class ReviewServiceImpl implements ReviewService{
 
@@ -40,5 +44,13 @@ public class ReviewServiceImpl implements ReviewService{
         reviewRepository.save(review);
         log.info("review successfully posted");
         return review;
+    }
+
+    @Override
+    public List<Review> getReviewByProductId(long productId) {
+        log.info("Get reviews of product with id: " + productId);
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+        log.info("Reviews successfully fetched");
+        return reviews;
     }
 }

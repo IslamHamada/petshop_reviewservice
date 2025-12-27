@@ -12,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
@@ -32,5 +34,13 @@ public class ReviewController {
     public ResponseEntity<Review> postProductReview(@Valid @RequestBody PostReviewRequest request){
         Review review = reviewService.postProductReview(request);
         return new ResponseEntity<>(review, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('Customer')")
+    @GetMapping
+    @RequestMapping("/product/{product_id}")
+    public ResponseEntity<List<Review>> getReviewsByProductId(@PositiveOrZero @PathVariable long product_id) {
+        List<Review> reviews =  reviewService.getReviewByProductId(product_id);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }
