@@ -31,6 +31,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .productId(request.getProduct_id())
                 .userId(request.getUser_id())
                 .build();
-        return reviewRepository.save(review);
+        reviewRepository.save(review);
+        return review;
     }
 }
