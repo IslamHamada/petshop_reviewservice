@@ -15,7 +15,7 @@ public class ReviewException extends ServiceException {
     private HttpStatus httpStatus;
 
     public ReviewException(String message, String error_code, HttpStatus httpStatus){
-        super(message, "REVIEW" + error_code);
+        super(message, "REVIEW_" + error_code);
         this.httpStatus = httpStatus;
     }
 }
