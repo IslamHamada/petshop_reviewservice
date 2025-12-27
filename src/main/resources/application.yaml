@@ -9,6 +9,11 @@ spring:
     username: root
     password: root
     driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
 
 server:
   port: 8087
