@@ -15,16 +15,22 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Review getReviewById(long id) {
-        return reviewRepository.findById(id).orElseThrow(
+        log.info("fetching review by id: " + id);
+        Review review = reviewRepository.findById(id).orElseThrow(
                 () -> new ReviewException(
                         "Review with id: " + id + " not found",
                         "NOT_FOUND",
                         HttpStatus.NOT_FOUND)
         );
+        log.info("Review successfully fetched");
+        return review;
     }
 
     @Override
     public Review postProductReview(PostReviewRequest request) {
+        log.info("Posting Product Review with text: " + request.getText()
+            + " and rating: " + request.getRating()
+            + " by user with id: " + request.getUser_id());
         Review review = Review.builder()
                 .text(request.getText())
                 .rating(request.getRating())
@@ -32,6 +38,7 @@ public class ReviewServiceImpl implements ReviewService{
                 .userId(request.getUser_id())
                 .build();
         reviewRepository.save(review);
+        log.info("review successfully posted");
         return review;
     }
 }
