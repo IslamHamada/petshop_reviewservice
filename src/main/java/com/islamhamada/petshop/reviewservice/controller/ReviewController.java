@@ -22,8 +22,7 @@ public class ReviewController {
     ReviewService reviewService;
 
     @PreAuthorize("hasAnyRole('Admin')")
-    @GetMapping
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PositiveOrZero @PathVariable long id){
         Review review = reviewService.getReviewById(id);
         return new ResponseEntity<>(review, HttpStatus.OK);
