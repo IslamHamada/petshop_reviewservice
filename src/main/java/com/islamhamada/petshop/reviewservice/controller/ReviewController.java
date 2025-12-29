@@ -21,7 +21,7 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
-    @PreAuthorize("hasAnyRole('Customer')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @GetMapping
     @RequestMapping("/{id}")
     public ResponseEntity<Review> getReviewById(@PositiveOrZero @PathVariable long id){
