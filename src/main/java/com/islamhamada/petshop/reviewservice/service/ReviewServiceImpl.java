@@ -35,8 +35,8 @@ public class ReviewServiceImpl implements ReviewService{
     public Review postProductReview(PostReviewRequest request) {
         log.info("Posting Product Review with text: " + request.getText()
             + " and rating: " + request.getRating()
-            + " by user with id: " + request.getUser_id());
-        Review review = Review.builder()
+            + " by user with id: " + request.getUserId()
+            + " for product with id: " + request.getProductId());
                 .text(request.getText())
                 .rating(request.getRating())
                 .productId(request.getProduct_id())

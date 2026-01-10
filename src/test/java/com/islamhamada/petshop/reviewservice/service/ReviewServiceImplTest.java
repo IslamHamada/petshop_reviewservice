@@ -83,16 +83,16 @@ public class ReviewServiceImplTest {
             verify(reviewRepository, times(1))
                     .save(any());
 
-            assertEquals(request.getProduct_id(), rv.getProductId());
+            assertEquals(request.getProductId(), rv.getProductId());
             assertEquals(request.getRating(), rv.getRating());
             assertEquals(request.getText(), rv.getText());
-            assertEquals(request.getUser_id(), rv.getUserId());
+            assertEquals(request.getUserId(), rv.getUserId());
         }
 
         private PostReviewRequest getMockPostReviewRequest() {
             return PostReviewRequest.builder()
-                    .product_id(2)
-                    .user_id(2)
+                    .productId(2)
+                    .userId(2)
                     .text("text")
                     .rating(3)
                     .build();

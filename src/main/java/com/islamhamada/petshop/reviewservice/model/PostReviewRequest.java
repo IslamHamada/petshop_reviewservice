@@ -19,7 +19,7 @@ public class PostReviewRequest {
     @Min(1) @Max(5)
     private int rating;
     @PositiveOrZero
-    private long product_id;
+    private long productId;
     @PositiveOrZero
-    private long user_id;
+    private long userId;
 }

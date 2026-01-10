@@ -140,8 +140,8 @@ class ReviewControllerTest {
             String mvcResponse = mvcResult.getResponse().getContentAsString();
             Review review = objectMapper.readValue(mvcResponse, Review.class);
 
-            assertEquals(review.getProductId(), postReviewRequest.getProduct_id());
-            assertEquals(review.getUserId(), postReviewRequest.getUser_id());
+            assertEquals(review.getProductId(), postReviewRequest.getProductId());
+            assertEquals(review.getUserId(), postReviewRequest.getUserId());
             assertEquals(review.getText(), postReviewRequest.getText());
             assertEquals(review.getRating(), postReviewRequest.getRating());
         }
@@ -172,26 +172,26 @@ class ReviewControllerTest {
             List<PostReviewRequest> rv = new ArrayList<PostReviewRequest>();
             rv.add(null);
             rv.add(PostReviewRequest.builder()
-                    .product_id(-1)
-                    .user_id(2)
+                    .productId(-1)
+                    .userId(2)
                     .text("text")
                     .rating(1)
                     .build());
             rv.add(PostReviewRequest.builder()
-                    .product_id(1)
-                    .user_id(-2)
+                    .productId(1)
+                    .userId(-2)
                     .text("text")
                     .rating(1)
                     .build());
             rv.add(PostReviewRequest.builder()
-                    .product_id(1)
-                    .user_id(2)
+                    .productId(1)
+                    .userId(2)
                     .text("a".repeat(256))
                     .rating(0)
                     .build());
             rv.add(PostReviewRequest.builder()
-                    .product_id(1)
-                    .user_id(2)
+                    .productId(1)
+                    .userId(2)
                     .text("text")
                     .rating(6)
                     .build());
@@ -200,8 +200,8 @@ class ReviewControllerTest {
 
         private PostReviewRequest getMockPostReviewRequest() {
             PostReviewRequest postReviewRequest = PostReviewRequest.builder()
-                    .product_id(1)
-                    .user_id(2)
+                    .productId(1)
+                    .userId(2)
                     .text("text")
                     .rating(3)
                     .build();
