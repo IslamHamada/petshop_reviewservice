@@ -1,0 +1,50 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: review-service-app
+spec:
+  selector:
+    matchLabels:
+      app: review-service-app
+  template:
+    metadata:
+      labels:
+        app: review-service-app
+    spec:
+      containers:
+        - name: review-service-app
+          image: IMAGE_URL:TAG
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 8087
+          env:
+            - name: EUREKA_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: eureka_server_url
+                  name: eureka-cm
+            - name: CONFIG_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: config_server_url
+                  name: config-cm
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql_url
+                  name: mysql-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: review-service-svc
+spec:
+  selector:
+    app: review-service-app
+ports:
+  - port: 80
+    targetPort: 8087
