@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -53,5 +54,11 @@ public class ReviewServiceImpl implements ReviewService{
         List<Review> reviews = reviewRepository.findByProductId(productId);
         log.info("Reviews successfully fetched");
         return reviews;
+    }
+
+    @Override
+    public Review getReviewByProductIdAndUserId(long productId, long userId) {
+        Optional<Review> review = reviewRepository.findByProductIdAndUserId(productId, userId);
+        return review.orElse(null);
     }
 }

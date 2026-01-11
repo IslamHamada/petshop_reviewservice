@@ -9,4 +9,5 @@ public interface ReviewService {
     Review getReviewById(long id);
     Review postProductReview(PostReviewRequest request);
     List<Review> getReviewByProductId(long productId);
+    Review getReviewByProductIdAndUserId(long productId, long userId);
 }

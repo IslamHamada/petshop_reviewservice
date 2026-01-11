@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/review")
@@ -39,5 +40,12 @@ public class ReviewController {
     public ResponseEntity<List<Review>> getReviewsByProductId(@PositiveOrZero @PathVariable long product_id) {
         List<Review> reviews =  reviewService.getReviewByProductId(product_id);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('Customer')")
+    @GetMapping("/product/user/{productId}/{userId}")
+    public ResponseEntity<Review> getReviewByProductIdAndUserId(@PositiveOrZero @PathVariable long productId, @PositiveOrZero @PathVariable long userId){
+        Review review = reviewService.getReviewByProductIdAndUserId(productId, userId);
+        return new ResponseEntity<>(review, HttpStatus.OK);
     }
 }
