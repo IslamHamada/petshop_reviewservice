@@ -34,7 +34,7 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
             JwtGrantedAuthoritiesConverter defaultConverter = new JwtGrantedAuthoritiesConverter();
             Collection<GrantedAuthority> authorities = defaultConverter.convert(jwt);
-            Collection<GrantedAuthority> roles = jwt.getClaimAsStringList("https://petshop/roles")
+            Collection<GrantedAuthority> roles = jwt.getClaimAsStringList("https://petshop.com/roles")
                     .stream()
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                     .collect(Collectors.toList());
