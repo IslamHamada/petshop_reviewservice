@@ -25,3 +25,9 @@ spring:
 
 server:
   port: 8087
+
+springdoc:
+  swagger-ui:
+    path: /review/swagger-ui.html
+  api-docs:
+    path: /review/api-docs
