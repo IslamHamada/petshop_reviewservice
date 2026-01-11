@@ -176,7 +176,7 @@
 					</from>
 					<to>
 						<image>${REPO_URL}</image>
-						<tags>cart-service-${VERSION}</tags>
+						<tags>review-service-${VERSION}</tags>
 					</to>
 				</configuration>
 			</plugin>
