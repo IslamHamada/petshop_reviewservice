@@ -22,33 +22,33 @@ public class ReviewController {
     ReviewService reviewService;
 
     @PreAuthorize("hasAnyRole('Admin')")
-    @GetMapping("/{id}")
+    @GetMapping("/protected/{id}")
     public ResponseEntity<Review> getReviewById(@PositiveOrZero @PathVariable long id){
         Review review = reviewService.getReviewById(id);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('Customer')")
-    @PostMapping
+    @PostMapping("/protected")
     public ResponseEntity<Review> postProductReview(@Valid @RequestBody PostReviewRequest request){
         Review review = reviewService.postProductReview(request);
         return new ResponseEntity<>(review, HttpStatus.OK);
     }
 
-    @GetMapping("/product/{product_id}")
+    @GetMapping("/public/product/{product_id}")
     public ResponseEntity<List<Review>> getReviewsByProductId(@PositiveOrZero @PathVariable long product_id) {
         List<Review> reviews =  reviewService.getReviewByProductId(product_id);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
-    @GetMapping("/product/summary/{product_id}")
+    @GetMapping("/public/product/summary/{product_id}")
     public ResponseEntity<SummarizeReivewsResponse> summarizeReviewsByProductId(@PositiveOrZero @PathVariable long product_id) {
         SummarizeReivewsResponse summary = reviewService.summarizeReviewsByProductId(product_id);
         return new ResponseEntity<>(summary, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('Customer')")
-    @GetMapping("/product/user/{productId}/{userId}")
+    @GetMapping("/protected/product/user/{productId}/{userId}")
     public ResponseEntity<Review> getReviewByProductIdAndUserId(@PositiveOrZero @PathVariable long productId, @PositiveOrZero @PathVariable long userId){
         Review review = reviewService.getReviewByProductIdAndUserId(productId, userId);
         return new ResponseEntity<>(review, HttpStatus.OK);
