@@ -45,6 +45,6 @@ metadata:
 spec:
   selector:
     app: review-service-app
-ports:
-  - port: 80
-    targetPort: 8087
+  ports:
+    - port: 80
+      targetPort: 8087
