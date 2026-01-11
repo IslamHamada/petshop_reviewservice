@@ -39,11 +39,20 @@ public class ReviewServiceImpl implements ReviewService{
             + " and rating: " + request.getRating()
             + " by user with id: " + request.getUserId()
             + " for product with id: " + request.getProductId());
-                .text(request.getText())
-                .rating(request.getRating())
-                .productId(request.getProduct_id())
-                .userId(request.getUser_id())
-                .build();
+        Optional<Review> old_review = reviewRepository.findByProductIdAndUserId(request.getProductId(), request.getUserId());
+        Review review;
+        if(old_review.isPresent()) {
+            review = old_review.get();
+            review.setRating(request.getRating());
+            review.setText(request.getText());
+        } else {
+            review = Review.builder()
+                    .text(request.getText())
+                    .rating(request.getRating())
+                    .productId(request.getProductId())
+                    .userId(request.getUserId())
+                    .build();
+        }
         reviewRepository.save(review);
         log.info("review successfully posted");
         return review;
