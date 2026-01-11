@@ -3,6 +3,7 @@ package com.islamhamada.petshop.reviewservice.service;
 import com.islamhamada.petshop.reviewservice.entity.Review;
 import com.islamhamada.petshop.reviewservice.exception.ReviewException;
 import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
+import com.islamhamada.petshop.reviewservice.model.SummarizeReivewsResponse;
 import com.islamhamada.petshop.reviewservice.repository.ReviewRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,18 @@ public class ReviewServiceImpl implements ReviewService{
         List<Review> reviews = reviewRepository.findByProductId(productId);
         log.info("Reviews successfully fetched");
         return reviews;
+    }
+
+    @Override
+    public SummarizeReivewsResponse summarizeReviewsByProductId(long product_id) {
+        List<Review> reviews = reviewRepository.findByProductId(product_id);
+        SummarizeReivewsResponse summary = new SummarizeReivewsResponse();
+        reviews.forEach(review -> {
+            summary.setCount(summary.getCount() + 1);
+            summary.setRating(summary.getRating() + review.getRating());
+        });
+        summary.setRating(summary.getRating() / summary.getCount());
+        return summary;
     }
 
     @Override

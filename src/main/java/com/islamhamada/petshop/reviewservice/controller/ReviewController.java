@@ -2,6 +2,7 @@ package com.islamhamada.petshop.reviewservice.controller;
 
 import com.islamhamada.petshop.reviewservice.entity.Review;
 import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
+import com.islamhamada.petshop.reviewservice.model.SummarizeReivewsResponse;
 import com.islamhamada.petshop.reviewservice.service.ReviewService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -40,6 +41,12 @@ public class ReviewController {
     public ResponseEntity<List<Review>> getReviewsByProductId(@PositiveOrZero @PathVariable long product_id) {
         List<Review> reviews =  reviewService.getReviewByProductId(product_id);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
+
+    @GetMapping("/product/summary/{product_id}")
+    public ResponseEntity<SummarizeReivewsResponse> summarizeReviewsByProductId(@PositiveOrZero @PathVariable long product_id) {
+        SummarizeReivewsResponse summary = reviewService.summarizeReviewsByProductId(product_id);
+        return new ResponseEntity<>(summary, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('Customer')")
