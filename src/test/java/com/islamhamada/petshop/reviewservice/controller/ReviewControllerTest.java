@@ -73,7 +73,7 @@ class ReviewControllerTest {
                     .build());
             long reviewId = dbReview.getId();
             MvcResult mvcResult
-                    = mockMvc.perform(get("/protected/review/" + reviewId)
+                    = mockMvc.perform(get("/review/protected/" + reviewId)
                     .with(jwt().authorities(neededRole))
             ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -89,7 +89,7 @@ class ReviewControllerTest {
 
         @Test
         public void failure_missing_role() throws Exception {
-            mockMvc.perform(get("/protected/review/1")
+            mockMvc.perform(get("/review/protected/1")
                     .with(jwt().authorities(notNeededRole))
             ).andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andReturn();
@@ -98,7 +98,7 @@ class ReviewControllerTest {
         @Test
         public void failure_not_found() throws Exception {
             long reviewId = 1;
-            MvcResult mvcResult = mockMvc.perform(get("/protected/review/" + reviewId)
+            MvcResult mvcResult = mockMvc.perform(get("/review/protected/" + reviewId)
                                         .with(jwt().authorities(neededRole))
                                 ).andExpect(MockMvcResultMatchers.status().isNotFound())
                                 .andReturn();
@@ -111,7 +111,7 @@ class ReviewControllerTest {
         @ParameterizedTest
         @MethodSource("bad_inputs")
         public void failure_bad_input(Object review_id) throws Exception {
-            MvcResult mvcResult = mockMvc.perform(get("/protected/review/" + review_id)
+            MvcResult mvcResult = mockMvc.perform(get("/review/protected/" + review_id)
                     .with(jwt().authorities(neededRole))
             ).andExpect(MockMvcResultMatchers.status().isBadRequest())
                     .andReturn();
@@ -130,7 +130,7 @@ class ReviewControllerTest {
         @Test
         public void success() throws Exception {
             PostReviewRequest postReviewRequest = getMockPostReviewRequest();
-            MvcResult mvcResult = mockMvc.perform(post("/protected/review")
+            MvcResult mvcResult = mockMvc.perform(post("/review/protected")
                     .with(jwt().authorities(neededRole))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(postReviewRequest))
@@ -149,7 +149,7 @@ class ReviewControllerTest {
         @Test
         public void failure_missing_role() throws Exception {
             PostReviewRequest request = getMockPostReviewRequest();
-            mockMvc.perform(post("/protected/review")
+            mockMvc.perform(post("/review/protected")
                     .with(jwt().authorities(unneededRole))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(request))
@@ -160,7 +160,7 @@ class ReviewControllerTest {
         @ParameterizedTest
         @MethodSource("bad_input")
         public void failure_bad_input(PostReviewRequest request) throws Exception {
-            mockMvc.perform(post("/protected/review")
+            mockMvc.perform(post("/review/protected")
                     .with(jwt().authorities(neededRole))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(request))
@@ -239,7 +239,7 @@ class ReviewControllerTest {
                             .userId(4)
                             .build()
             );
-            MvcResult mvcResult = mockMvc.perform(get("/public/review/product/" + product_id))
+            MvcResult mvcResult = mockMvc.perform(get("/review/public/product/" + product_id))
                     .andExpect(MockMvcResultMatchers.status().isOk())
                     .andReturn();
             String response = mvcResult.getResponse().getContentAsString();
@@ -252,7 +252,7 @@ class ReviewControllerTest {
         @Test
         public void failure_bad_input() throws Exception {
             long product_id = -1;
-            mockMvc.perform(get("/public/review/product" + product_id))
+            mockMvc.perform(get("/review/public/product/" + product_id))
                     .andExpect(MockMvcResultMatchers.status().isBadRequest())
                     .andReturn();
         }
