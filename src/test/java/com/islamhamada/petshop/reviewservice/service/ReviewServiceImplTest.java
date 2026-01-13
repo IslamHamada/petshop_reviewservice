@@ -136,7 +136,7 @@ public class ReviewServiceImplTest {
     }
 
     @Nested
-    public class getReviewByProductId {
+    class getReviewByProductId {
 
         @Test
         void success() {
@@ -153,7 +153,7 @@ public class ReviewServiceImplTest {
     }
 
     @Nested
-    public class summarizeReviewsByProductId {
+    class summarizeReviewsByProductId {
 
         @Test
         void success() {
@@ -170,7 +170,7 @@ public class ReviewServiceImplTest {
     }
 
     @Nested
-    public class getReviewByProductIdAndUserId {
+    class getReviewByProductIdAndUserId {
         @Test
         void success_exists() {
             long productId = 1;
@@ -196,7 +196,7 @@ public class ReviewServiceImplTest {
         }
     }
 
-    public Review getMockReview() {
+    Review getMockReview() {
         return Review.builder()
                 .id(1)
                 .productId(1)
