@@ -31,7 +31,7 @@ public class ReviewServiceImplTest {
     class getReviewById {
 
         @Test
-        public void success() {
+        void success() {
             Review review = getMockReview();
 
             when(reviewRepository.findById(anyLong()))
@@ -50,7 +50,7 @@ public class ReviewServiceImplTest {
         }
 
         @Test
-        public void failure() {
+        void failure() {
             int review_id = 1;
             when(reviewRepository.findById(anyLong()))
                     .thenReturn(Optional.empty());
@@ -77,7 +77,7 @@ public class ReviewServiceImplTest {
     class postProductReview {
 
         @Test
-        public void success_new() {
+        void success_new() {
             PostReviewRequest request = getMockPostReviewRequest();
             when(reviewRepository.findByProductIdAndUserId(anyLong(), anyLong()))
                     .thenReturn(Optional.empty());
@@ -102,7 +102,7 @@ public class ReviewServiceImplTest {
         }
 
         @Test
-        public void success_with_old() {
+        void success_with_old() {
             PostReviewRequest request = getMockPostReviewRequest();
             when(reviewRepository.findByProductIdAndUserId(request.getProductId(), request.getUserId()))
                     .thenReturn(Optional.of(getMockReview3()));
