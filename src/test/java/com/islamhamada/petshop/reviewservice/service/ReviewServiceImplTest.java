@@ -31,7 +31,7 @@ public class ReviewServiceImplTest {
     class getReviewById {
 
         @Test
-        public void success() {
+        void success() {
             Review review = getMockReview();
 
             when(reviewRepository.findById(anyLong()))
@@ -50,7 +50,7 @@ public class ReviewServiceImplTest {
         }
 
         @Test
-        public void failure() {
+        void failure() {
             int review_id = 1;
             when(reviewRepository.findById(anyLong()))
                     .thenReturn(Optional.empty());
@@ -77,7 +77,7 @@ public class ReviewServiceImplTest {
     class postProductReview {
 
         @Test
-        public void success_new() {
+        void success_new() {
             PostReviewRequest request = getMockPostReviewRequest();
             when(reviewRepository.findByProductIdAndUserId(anyLong(), anyLong()))
                     .thenReturn(Optional.empty());
@@ -102,7 +102,7 @@ public class ReviewServiceImplTest {
         }
 
         @Test
-        public void success_with_old() {
+        void success_with_old() {
             PostReviewRequest request = getMockPostReviewRequest();
             when(reviewRepository.findByProductIdAndUserId(request.getProductId(), request.getUserId()))
                     .thenReturn(Optional.of(getMockReview3()));
@@ -136,7 +136,7 @@ public class ReviewServiceImplTest {
     }
 
     @Nested
-    public class getReviewByProductId {
+    class getReviewByProductId {
 
         @Test
         void success() {
@@ -153,7 +153,7 @@ public class ReviewServiceImplTest {
     }
 
     @Nested
-    public class summarizeReviewsByProductId {
+    class summarizeReviewsByProductId {
 
         @Test
         void success() {
@@ -170,7 +170,7 @@ public class ReviewServiceImplTest {
     }
 
     @Nested
-    public class getReviewByProductIdAndUserId {
+    class getReviewByProductIdAndUserId {
         @Test
         void success_exists() {
             long productId = 1;
@@ -196,7 +196,7 @@ public class ReviewServiceImplTest {
         }
     }
 
-    public Review getMockReview() {
+    Review getMockReview() {
         return Review.builder()
                 .id(1)
                 .productId(1)
