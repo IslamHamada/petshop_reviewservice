@@ -263,11 +263,11 @@ class ReviewControllerTest {
     }
 
     @Nested
-    public class summarizeReviewsByProductId {
+    class summarizeReviewsByProductId {
         @Test
         void success_no_reviews() throws Exception {
-            long product_id = 1;
-            MvcResult mvcResult = mockMvc.perform(get("/review/public/product/summary/" + product_id))
+            long productId = 1;
+            MvcResult mvcResult = mockMvc.perform(get("/review/public/product/summary/" + productId))
                     .andExpect(status().isOk())
                     .andReturn();
             String response = mvcResult.getResponse().getContentAsString();
@@ -278,18 +278,18 @@ class ReviewControllerTest {
 
         @Test
         void success_with_reviews() throws Exception {
-            long product_id = 1;
+            long productId = 1;
             Review review = getMockReview();
-            assertEquals(product_id, review.getProductId());
+            assertEquals(productId, review.getProductId());
             reviewRepository.save(review);
             Review review2 = Review.builder()
-                    .productId(product_id)
+                    .productId(productId)
                     .userId(2)
                     .rating(2)
                     .text("text2")
                     .build();
             reviewRepository.save(review2);
-            MvcResult mvcResult = mockMvc.perform(get("/review/public/product/summary/" + product_id))
+            MvcResult mvcResult = mockMvc.perform(get("/review/public/product/summary/" + productId))
                     .andExpect(status().isOk())
                     .andReturn();
             String response = mvcResult.getResponse().getContentAsString();
@@ -301,15 +301,15 @@ class ReviewControllerTest {
 
         @Test
         void failure_bad_input() throws Exception {
-            long product_id = -1;
-            mockMvc.perform(get("/review/public/product/summary/" + product_id))
+            long productId = -1;
+            mockMvc.perform(get("/review/public/product/summary/" + productId))
                     .andExpect(status().isBadRequest())
                     .andReturn();
         }
     }
 
     @Nested
-    public class getReviewByProductIdAndUserId {
+    class getReviewByProductIdAndUserId {
         SimpleGrantedAuthority neededRole = customerRole;
         SimpleGrantedAuthority notNeededRole = adminRole;
 
