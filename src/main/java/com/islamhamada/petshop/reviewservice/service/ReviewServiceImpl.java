@@ -53,7 +53,7 @@ public class ReviewServiceImpl implements ReviewService{
                     .userId(request.getUserId())
                     .build();
         }
-        reviewRepository.save(review);
+        review = reviewRepository.save(review);
         log.info("review successfully posted");
         return review;
     }
