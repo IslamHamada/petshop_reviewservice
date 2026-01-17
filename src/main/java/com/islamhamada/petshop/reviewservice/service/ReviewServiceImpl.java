@@ -69,6 +69,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public SummarizeReivewsResponse summarizeReviewsByProductId(long product_id) {
         List<Review> reviews = reviewRepository.findByProductId(product_id);
+        if(reviews.isEmpty()) return new SummarizeReivewsResponse();
         SummarizeReivewsResponse summary = new SummarizeReivewsResponse();
         reviews.forEach(review -> {
             summary.setCount(summary.getCount() + 1);
