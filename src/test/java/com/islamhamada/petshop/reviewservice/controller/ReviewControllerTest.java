@@ -7,11 +7,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.islamhamada.petshop.contracts.model.RestExceptionResponse;
 import com.islamhamada.petshop.reviewservice.entity.Review;
 import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
+import com.islamhamada.petshop.reviewservice.model.SummarizeReivewsResponse;
 import com.islamhamada.petshop.reviewservice.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -257,5 +260,115 @@ class ReviewControllerTest {
                     .andExpect(status().isBadRequest())
                     .andReturn();
         }
+    }
+
+    @Nested
+    public class summarizeReviewsByProductId {
+        @Test
+        void success_no_reviews() throws Exception {
+            long product_id = 1;
+            MvcResult mvcResult = mockMvc.perform(get("/review/public/product/summary/" + product_id))
+                    .andExpect(status().isOk())
+                    .andReturn();
+            String response = mvcResult.getResponse().getContentAsString();
+            SummarizeReivewsResponse summary = objectMapper.readValue(response, SummarizeReivewsResponse.class);
+            assertEquals(0, summary.getCount());
+            assertEquals(0, summary.getRating());
+        }
+
+        @Test
+        void success_with_reviews() throws Exception {
+            long product_id = 1;
+            Review review = getMockReview();
+            assertEquals(product_id, review.getProductId());
+            reviewRepository.save(review);
+            Review review2 = Review.builder()
+                    .productId(product_id)
+                    .userId(2)
+                    .rating(2)
+                    .text("text2")
+                    .build();
+            reviewRepository.save(review2);
+            MvcResult mvcResult = mockMvc.perform(get("/review/public/product/summary/" + product_id))
+                    .andExpect(status().isOk())
+                    .andReturn();
+            String response = mvcResult.getResponse().getContentAsString();
+            SummarizeReivewsResponse summary = objectMapper.readValue(response, SummarizeReivewsResponse.class);
+            assertEquals(2, summary.getCount());
+            double avg = (review.getRating() + review2.getRating()) / 2.0;
+            assertEquals(avg, summary.getRating());
+        }
+
+        @Test
+        void failure_bad_input() throws Exception {
+            long product_id = -1;
+            mockMvc.perform(get("/review/public/product/summary/" + product_id))
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+        }
+    }
+
+    @Nested
+    public class getReviewByProductIdAndUserId {
+        SimpleGrantedAuthority neededRole = customerRole;
+        SimpleGrantedAuthority notNeededRole = adminRole;
+
+        @Test
+        void success_with_review() throws Exception {
+            Review review = getMockReview();
+            reviewRepository.save(review);
+            MvcResult result = mockMvc.perform(get("/review/protected/product/user/" + review.getProductId() + "/" + review.getUserId())
+                    .with(jwt().authorities(neededRole)))
+                    .andExpect(status().isOk())
+                    .andReturn();
+            String response = result.getResponse().getContentAsString();
+            Review review2 = objectMapper.readValue(response, Review.class);
+            assertThat(review)
+                    .usingRecursiveComparison()
+                    .isEqualTo(review2);
+        }
+
+        @Test
+        void success_no_review() throws Exception {
+            MvcResult result = mockMvc.perform(get("/review/protected/product/user/1/1")
+                            .with(jwt().authorities(neededRole)))
+                    .andExpect(status().isOk())
+                    .andReturn();
+            String response = result.getResponse().getContentAsString();
+            assertEquals("", response);
+        }
+
+        @Test
+        void failure_no_permission() throws Exception {
+            mockMvc.perform(get("/review/protected/product/user/1/1")
+                    .with(jwt().authorities(notNeededRole)))
+                    .andExpect(status().isForbidden())
+                    .andReturn();
+        }
+
+        @ParameterizedTest
+        @MethodSource("bad_input")
+        void failure_bad_input(long productId, long userId) throws Exception {
+            mockMvc.perform(get("/review/protected/product/user/" + productId + "/" + userId)
+                            .with(jwt().authorities(neededRole)))
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+        }
+
+        static List<Arguments> bad_input() {
+            List<Arguments> list = new ArrayList<>();
+            list.add(Arguments.of(-1, 1));
+            list.add(Arguments.of(1, -1));
+            return list;
+        }
+    }
+
+    private Review getMockReview() {
+        return Review.builder()
+                .productId(1)
+                .userId(1)
+                .rating(4)
+                .text("text")
+                .build();
     }
 }
