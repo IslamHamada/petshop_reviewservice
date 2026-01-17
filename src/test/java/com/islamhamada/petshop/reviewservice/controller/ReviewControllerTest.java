@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest({"server.port=0"})
 @EnableConfigurationProperties
@@ -75,7 +76,7 @@ class ReviewControllerTest {
             MvcResult mvcResult
                     = mockMvc.perform(get("/review/protected/" + reviewId)
                     .with(jwt().authorities(neededRole))
-            ).andExpect(MockMvcResultMatchers.status().isOk())
+            ).andExpect(status().isOk())
                 .andReturn();
 
             String mvcResponse = mvcResult.getResponse().getContentAsString();
@@ -91,7 +92,7 @@ class ReviewControllerTest {
         public void failure_missing_role() throws Exception {
             mockMvc.perform(get("/review/protected/1")
                     .with(jwt().authorities(notNeededRole))
-            ).andExpect(MockMvcResultMatchers.status().isForbidden())
+            ).andExpect(status().isForbidden())
                 .andReturn();
         }
 
@@ -100,7 +101,7 @@ class ReviewControllerTest {
             long reviewId = 1;
             MvcResult mvcResult = mockMvc.perform(get("/review/protected/" + reviewId)
                                         .with(jwt().authorities(neededRole))
-                                ).andExpect(MockMvcResultMatchers.status().isNotFound())
+                                ).andExpect(status().isNotFound())
                                 .andReturn();
             String mvcResponse = mvcResult.getResponse().getContentAsString();
             RestExceptionResponse exceptionResponse = objectMapper.readValue(mvcResponse, RestExceptionResponse.class);
@@ -113,7 +114,7 @@ class ReviewControllerTest {
         public void failure_bad_input(Object review_id) throws Exception {
             MvcResult mvcResult = mockMvc.perform(get("/review/protected/" + review_id)
                     .with(jwt().authorities(neededRole))
-            ).andExpect(MockMvcResultMatchers.status().isBadRequest())
+            ).andExpect(status().isBadRequest())
                     .andReturn();
         }
 
@@ -134,7 +135,7 @@ class ReviewControllerTest {
                     .with(jwt().authorities(neededRole))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(postReviewRequest))
-            ).andExpect(MockMvcResultMatchers.status().isOk())
+            ).andExpect(status().isOk())
                     .andReturn();
 
             String mvcResponse = mvcResult.getResponse().getContentAsString();
@@ -153,7 +154,7 @@ class ReviewControllerTest {
                     .with(jwt().authorities(unneededRole))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(request))
-            ).andExpect(MockMvcResultMatchers.status().isForbidden())
+            ).andExpect(status().isForbidden())
                     .andReturn();
         }
 
@@ -164,7 +165,7 @@ class ReviewControllerTest {
                     .with(jwt().authorities(neededRole))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(objectMapper.writeValueAsString(request))
-            ).andExpect(MockMvcResultMatchers.status().isBadRequest())
+            ).andExpect(status().isBadRequest())
                     .andReturn();
         }
 
@@ -240,7 +241,7 @@ class ReviewControllerTest {
                             .build()
             );
             MvcResult mvcResult = mockMvc.perform(get("/review/public/product/" + product_id))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(status().isOk())
                     .andReturn();
             String response = mvcResult.getResponse().getContentAsString();
             List<Review> productReviews = objectMapper.readValue(response, new TypeReference<List<Review>>(){});
@@ -253,7 +254,7 @@ class ReviewControllerTest {
         public void failure_bad_input() throws Exception {
             long product_id = -1;
             mockMvc.perform(get("/review/public/product/" + product_id))
-                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andExpect(status().isBadRequest())
                     .andReturn();
         }
     }
