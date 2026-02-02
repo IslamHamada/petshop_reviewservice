@@ -1,15 +1,12 @@
 package com.islamhamada.petshop.reviewservice.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "review")
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,8 +15,13 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "product_id")
     private long productId;
+
+    @Column(name = "user_id")
     private long userId;
+
     private String text;
     private int rating;
 }
