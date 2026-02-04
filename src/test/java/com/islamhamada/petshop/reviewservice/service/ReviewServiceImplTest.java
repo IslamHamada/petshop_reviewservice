@@ -1,5 +1,6 @@
 package com.islamhamada.petshop.reviewservice.service;
 
+import com.islamhamada.petshop.contracts.model.KafkaUserMessage;
 import com.islamhamada.petshop.reviewservice.entity.Review;
 import com.islamhamada.petshop.reviewservice.exception.ReviewException;
 import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
@@ -11,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +22,14 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@EmbeddedKafka(partitions = 1, topics = "notification")
 public class ReviewServiceImplTest {
 
     @Mock
     ReviewRepository reviewRepository;
+
+    @Mock
+    KafkaTemplate<String, KafkaUserMessage> kafkaTemplate;
 
     @InjectMocks
     ReviewService reviewService = new ReviewServiceImpl();
