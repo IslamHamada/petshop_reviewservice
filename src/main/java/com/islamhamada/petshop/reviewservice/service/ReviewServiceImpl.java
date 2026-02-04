@@ -1,5 +1,6 @@
 package com.islamhamada.petshop.reviewservice.service;
 
+import com.islamhamada.petshop.contracts.model.KafkaUserMessage;
 import com.islamhamada.petshop.reviewservice.entity.Review;
 import com.islamhamada.petshop.reviewservice.exception.ReviewException;
 import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
@@ -8,6 +9,7 @@ import com.islamhamada.petshop.reviewservice.repository.ReviewRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,9 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Autowired
     ReviewRepository reviewRepository;
+
+    @Autowired
+    KafkaTemplate<String, KafkaUserMessage> kafkaTemplate;
 
     @Override
     public Review getReviewById(long id) {
@@ -45,7 +50,15 @@ public class ReviewServiceImpl implements ReviewService{
             review = old_review.get();
             review.setRating(request.getRating());
             review.setText(request.getText());
+            kafkaTemplate.send("notification", KafkaUserMessage.builder()
+                    .userId(request.getUserId())
+                    .message("Edited a product review")
+                    .build());
         } else {
+            kafkaTemplate.send("notification", KafkaUserMessage.builder()
+                    .userId(request.getUserId())
+                    .message("Reviewed a product successfully")
+                    .build());
             review = Review.builder()
                     .text(request.getText())
                     .rating(request.getRating())
