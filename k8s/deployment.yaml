@@ -37,6 +37,11 @@ spec:
                 configMapKeyRef:
                   key: mysql_url
                   name: mysql-cm
+            - name: KAFKA_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: kafka_url
+                  name: kafka-cm
 ---
 apiVersion: v1
 kind: Service
