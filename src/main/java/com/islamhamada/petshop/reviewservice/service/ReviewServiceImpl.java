@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Log4j2
 @Service
@@ -39,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Review postProductReview(PostReviewRequest request) {
+    public Review postProductReview(PostReviewRequest request) throws ExecutionException, InterruptedException {
         log.info("Posting Product Review with text: " + request.getText()
             + " and rating: " + request.getRating()
             + " by user with id: " + request.getUserId()
@@ -50,10 +51,10 @@ public class ReviewServiceImpl implements ReviewService{
             review = old_review.get();
             review.setRating(request.getRating());
             review.setText(request.getText());
-            kafkaTemplate.send("notification", KafkaUserMessage.builder()
+            System.out.println(kafkaTemplate.send("notification", KafkaUserMessage.builder()
                     .userId(request.getUserId())
                     .message("Edited a product review")
-                    .build());
+                    .build()).get());
         } else {
             kafkaTemplate.send("notification", KafkaUserMessage.builder()
                     .userId(request.getUserId())
