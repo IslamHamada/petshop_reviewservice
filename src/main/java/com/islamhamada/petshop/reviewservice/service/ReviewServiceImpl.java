@@ -51,14 +51,10 @@ public class ReviewServiceImpl implements ReviewService{
             review = old_review.get();
             review.setRating(request.getRating());
             review.setText(request.getText());
-            try {
-                System.out.println(kafkaTemplate.send("notification", KafkaUserMessage.builder()
-                        .userId(request.getUserId())
-                        .message("Edited a product review")
-                        .build()).get());
-            } catch (InterruptedException | ExecutionException e) {
-                System.out.println(e);
-            }
+            kafkaTemplate.send("notification", KafkaUserMessage.builder()
+                    .userId(request.getUserId())
+                    .message("Edited a product review")
+                    .build());
         } else {
             kafkaTemplate.send("notification", KafkaUserMessage.builder()
                     .userId(request.getUserId())
