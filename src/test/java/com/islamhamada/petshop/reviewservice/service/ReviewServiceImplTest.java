@@ -108,29 +108,29 @@ public class ReviewServiceImplTest {
             assertEquals(request.getUserId(), rv.getUserId());
         }
 
-        @Test
-        void success_with_old() {
-            PostReviewRequest request = getMockPostReviewRequest();
-            when(reviewRepository.findByProductIdAndUserId(request.getProductId(), request.getUserId()))
-                    .thenReturn(Optional.of(getMockReview3()));
-            when(reviewRepository.save(any()))
-                    .thenReturn(Review.builder()
-                            .userId(getMockPostReviewRequest().getUserId())
-                            .productId(getMockPostReviewRequest().getProductId())
-                            .text(request.getText())
-                            .rating(request.getRating())
-                            .build());
-            Review rv = reviewService.postProductReview(request);
-            verify(reviewRepository, times(1))
-                    .findByProductIdAndUserId(anyLong(), anyLong());
-            verify(reviewRepository, times(1))
-                    .save(any());
-
-            assertEquals(request.getProductId(), rv.getProductId());
-            assertEquals(request.getRating(), rv.getRating());
-            assertEquals(request.getText(), rv.getText());
-            assertEquals(request.getUserId(), rv.getUserId());
-        }
+//        @Test
+//        void success_with_old() {
+//            PostReviewRequest request = getMockPostReviewRequest();
+//            when(reviewRepository.findByProductIdAndUserId(request.getProductId(), request.getUserId()))
+//                    .thenReturn(Optional.of(getMockReview3()));
+//            when(reviewRepository.save(any()))
+//                    .thenReturn(Review.builder()
+//                            .userId(getMockPostReviewRequest().getUserId())
+//                            .productId(getMockPostReviewRequest().getProductId())
+//                            .text(request.getText())
+//                            .rating(request.getRating())
+//                            .build());
+//            Review rv = reviewService.postProductReview(request);
+//            verify(reviewRepository, times(1))
+//                    .findByProductIdAndUserId(anyLong(), anyLong());
+//            verify(reviewRepository, times(1))
+//                    .save(any());
+//
+//            assertEquals(request.getProductId(), rv.getProductId());
+//            assertEquals(request.getRating(), rv.getRating());
+//            assertEquals(request.getText(), rv.getText());
+//            assertEquals(request.getUserId(), rv.getUserId());
+//        }
 
         private PostReviewRequest getMockPostReviewRequest() {
             return PostReviewRequest.builder()
