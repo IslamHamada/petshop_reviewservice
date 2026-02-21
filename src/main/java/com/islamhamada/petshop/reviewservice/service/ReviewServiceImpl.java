@@ -40,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Review postProductReview(PostReviewRequest request) throws ExecutionException, InterruptedException {
+    public Review postProductReview(PostReviewRequest request) {
         log.info("Posting Product Review with text: " + request.getText()
             + " and rating: " + request.getRating()
             + " by user with id: " + request.getUserId()
@@ -51,10 +51,14 @@ public class ReviewServiceImpl implements ReviewService{
             review = old_review.get();
             review.setRating(request.getRating());
             review.setText(request.getText());
-            System.out.println(kafkaTemplate.send("notification", KafkaUserMessage.builder()
-                    .userId(request.getUserId())
-                    .message("Edited a product review")
-                    .build()).get());
+            try {
+                System.out.println(kafkaTemplate.send("notification", KafkaUserMessage.builder()
+                        .userId(request.getUserId())
+                        .message("Edited a product review")
+                        .build()).get());
+            } catch (InterruptedException | ExecutionException e) {
+                System.out.println(e);
+            }
         } else {
             kafkaTemplate.send("notification", KafkaUserMessage.builder()
                     .userId(request.getUserId())

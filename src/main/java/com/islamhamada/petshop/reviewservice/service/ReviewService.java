@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 public interface ReviewService {
     Review getReviewById(long id);
-    Review postProductReview(PostReviewRequest request) throws ExecutionException, InterruptedException;
+    Review postProductReview(PostReviewRequest request);
     List<Review> getReviewByProductId(long productId);
     SummarizeReivewsResponse summarizeReviewsByProductId(long productId);
     Review getReviewByProductIdAndUserId(long productId, long userId);
