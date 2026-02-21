@@ -5,7 +5,6 @@ import com.islamhamada.petshop.reviewservice.model.PostReviewRequest;
 import com.islamhamada.petshop.reviewservice.model.SummarizeReivewsResponse;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public interface ReviewService {
     Review getReviewById(long id);
